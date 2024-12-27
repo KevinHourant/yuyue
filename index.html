@@ -49,11 +49,12 @@
             font-size: 18px;
             background: none;
             border: none;
-            cursor: pointer;
+            cursor: default;
             position: relative;
             width: 20px;
             height: 20px;
             padding: 0;
+            pointer-events: none;
         }
 
         .back-btn::before {
@@ -197,6 +198,9 @@
             left: 50%;
             transform: translateX(-50%);
             color: #333;
+            text-decoration: none;
+            pointer-events: none;
+            -webkit-text-decoration: none;
         }
 
         .tag {
@@ -332,7 +336,7 @@
             <div class="qr-title">预约二维码</div>
             <div class="qr-code">
                 <img src="2.png" alt="预约二维码">
-                <span class="expired-text">已核销</span>
+                <span class="expired-text">已入场</span>
             </div>
             <p class="qr-notice">进入场馆时请展示此二维码用于核销</p>
         </div>
@@ -369,12 +373,6 @@
     <script>
         // 页面加载完成后的处理
         document.addEventListener('DOMContentLoaded', function() {
-            // 返回按钮点击事件
-            document.querySelector('.back-btn').addEventListener('click', function() {
-                // 这里可以添加返回逻辑
-                alert('点击了返回按钮');
-            });
-
             // 添加随行人员按钮点击事件
             document.querySelector('.add-companion-btn').addEventListener('click', function() {
                 alert('已达到随行人上限');
@@ -416,7 +414,7 @@
                     if (pullDistance >= 60) {
                         pullToRefresh.textContent = '释放刷新';
                     } else {
-                        pullToRefresh.textContent = '��� 下拉刷新';
+                        pullToRefresh.textContent = '↓ 下拉刷新';
                     }
                 }
             });
