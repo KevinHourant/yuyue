@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>预约详情</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            position: relative;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* 顶部状态栏 */
+        .status-bar {
+            color: white;
+            padding: 5px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 导航栏 */
+        .nav-bar {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+        }
+
+        .back-btn {
+            font-size: 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* 预约信息部分 */
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            padding: 15px;
+            background-color: #f8f8f8;
+        }
+
+        .info-item {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* 二维码部分 */
+        .qr-code-section {
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .qr-code::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(128, 128, 128, 0.8);
+            z-index: 1;
+        }
+
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .expired-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 18px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 15px;
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        .qr-notice {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* 随行人员部分 */
+        .companions-section {
+            padding: 15px;
+            margin: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .companion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .companion-count {
+            color: #2196F3;
+        }
+
+        .main-user {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+
+        .tag {
+            color: #4CAF50;
+            border: 1px solid #4CAF50;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .add-companion-btn {
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            width: 100%;
+            border-radius: 20px;
+            background: #2196F3;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        /* 底部按钮 */
+        .bottom-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: white;
+            border-top: 1px solid #eee;
+        }
+
+        .bottom-btn {
+            flex: 1;
+            padding: 12px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+            font-size: 16px;
+        }
+
+        .cancel-btn {
+            background-color: white;
+        }
+
+        .comment-btn {
+            background-color: white;
+        }
+
+        .section-content {
+            background-color: white;
+            margin: 15px;
+            border-radius: 8px;
+            padding: 5px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .pull-to-refresh {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: -60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .pull-to-refresh.refreshing {
+            animation: rotating 2s linear infinite;
+        }
+
+        @keyframes rotating {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="pull-to-refresh">↓ 下拉刷新</div>
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <button class="back-btn">×</button>
+            <span>预约详情</span>
+            <span></span>
+        </div>
+
+        <!-- 预约信息 -->
+        <div class="section-title">预约信息</div>
+        <div class="section-content">
+            <div class="info-item">
+                <span>预约项目</span>
+                <span>健身房</span>
+            </div>
+            <div class="info-item">
+                <span>预约场地</span>
+                <span>北校区健身房（北）</span>
+            </div>
+            <div class="info-item">
+                <span>预约时间</span>
+                <span id="appointmentTime">2024-12-19 19:30-21:00</span>
+            </div>
+        </div>
+
+        <!-- 二维码部分 -->
+        <div class="section-title">预约二维码</div>
+        <div class="qr-code-section">
+            <div class="qr-code">
+                <img src="qr-code.png" alt="预约二维码">
+                <span class="expired-text">已核销</span>
+            </div>
+            <p class="qr-notice">进入场馆时请展示此二维码用于核销</p>
+        </div>
+
+        <!-- 随行人员 -->
+        <div class="companions-section">
+            <div class="companion-header">
+                <span>随行人员</span>
+                <span class="companion-count">共0位</span>
+            </div>
+            <div class="main-user">
+                <span>侯泽康 2023122003</span>
+                <span class="tag">主预约人</span>
+            </div>
+            <button class="add-companion-btn">还可添加0位随行人员</button>
+        </div>
+
+        <!-- 底部按钮 -->
+        <div class="bottom-buttons">
+            <button class="bottom-btn comment-btn">提交留言</button>
+            <button class="bottom-btn cancel-btn">取消预约</button>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载完成后的处理
+        document.addEventListener('DOMContentLoaded', function() {
+            // 返回按钮点击事件
+            document.querySelector('.back-btn').addEventListener('click', function() {
+                // 这里可以添加返回逻辑
+                alert('点击了返回按钮');
+            });
+
+            // 添加随行人员按钮点击事件
+            document.querySelector('.add-companion-btn').addEventListener('click', function() {
+                alert('已达到随行人员上限');
+            });
+
+            // 提交留言按钮点击事件
+            document.querySelector('.comment-btn').addEventListener('click', function() {
+                alert('提交留言');
+            });
+
+            // 取消预约按钮点击事件
+            document.querySelector('.cancel-btn').addEventListener('click', function() {
+                if(confirm('确定要取消预约吗？')) {
+                    alert('预约已取消');
+                }
+            });
+
+            const container = document.querySelector('.container');
+            const pullToRefresh = document.querySelector('.pull-to-refresh');
+            let touchStart = 0;
+            let touchY = 0;
+            let isRefreshing = false;
+
+            container.addEventListener('touchstart', function(e) {
+                touchStart = e.touches[0].pageY;
+                touchY = touchStart;
+            });
+
+            container.addEventListener('touchmove', function(e) {
+                const currentY = e.touches[0].pageY;
+                const diff = currentY - touchStart;
+                touchY = currentY;
+
+                if (container.scrollTop === 0 && diff > 0 && !isRefreshing) {
+                    e.preventDefault();
+                    const pullDistance = Math.min(diff / 2, 60);
+                    container.style.transform = `translateY(${pullDistance}px)`;
+                    
+                    if (pullDistance >= 60) {
+                        pullToRefresh.textContent = '释放刷新';
+                    } else {
+                        pullToRefresh.textContent = '↓ 下拉刷新';
+                    }
+                }
+            });
+
+            container.addEventListener('touchend', function() {
+                if (container.scrollTop === 0 && !isRefreshing) {
+                    const translateY = parseFloat(container.style.transform.replace('translateY(', ''));
+                    
+                    if (translateY >= 60) {
+                        // 开始刷新
+                        isRefreshing = true;
+                        container.style.transform = 'translateY(60px)';
+                        pullToRefresh.textContent = '刷新中...';
+                        pullToRefresh.classList.add('refreshing');
+                        
+                        // 模拟刷新过程
+                        setTimeout(() => {
+                            isRefreshing = false;
+                            container.style.transform = 'translateY(0)';
+                            pullToRefresh.textContent = '↓ 下拉刷新';
+                            pullToRefresh.classList.remove('refreshing');
+                            location.reload(); // 刷新页面
+                        }, 1000);
+                    } else {
+                        container.style.transform = 'translateY(0)';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
