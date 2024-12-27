@@ -132,20 +132,6 @@
             object-fit: contain;
         }
 
-        /* 已核销文字背景也相应调整 */
-        .expired-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: white;
-            font-size: 18px;
-            background-color: rgba(100, 100, 100, 0.85);
-            padding: 5px 15px;
-            border-radius: 4px;
-            z-index: 2;
-        }
-
         .qr-notice {
             color: #666;
             font-size: 14px;
@@ -361,7 +347,6 @@
             <div class="qr-title">预约二维码</div>
             <div class="qr-code">
                 <img src="2.png" alt="预约二维码">
-                <span class="expired-text">已入场</span>
             </div>
             <p class="qr-notice">进入场馆时请展示此二维码用于核销</p>
         </div>
@@ -387,7 +372,7 @@
             <button class="add-companion-btn">还可添加0位随行人员</button>
         </div>
 
-        <!-- 添加底部空白区域 -->
+        <!-- 添���底部空白区域 -->
         <div class="bottom-padding"></div>
 
         <!-- 底部按钮 -->
