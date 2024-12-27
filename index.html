@@ -203,21 +203,29 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            color: #333;
-            text-decoration: none;
+            color: #333 !important;
+            text-decoration: none !important;
             pointer-events: none;
-            -webkit-text-decoration: none;
+            -webkit-text-decoration: none !important;
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
             user-select: none;
+            background: none;
+            border: none;
+            -webkit-user-modify: read-only;
+            -moz-user-modify: read-only;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
 
         .user-id:link,
         .user-id:visited,
         .user-id:hover,
-        .user-id:active {
-            color: #333;
-            text-decoration: none;
+        .user-id:active,
+        .user-id * {
+            color: #333 !important;
+            text-decoration: none !important;
         }
 
         .tag {
@@ -371,7 +379,10 @@
             </div>
             <div class="main-user">
                 <span class="user-name">张伟</span>
-                <div class="user-id"> 2023102066 </div>
+                <div class="user-id">
+                    <span>2023</span>
+                    <span>102066</span>
+                </div>
                 <span class="tag">主预约人</span>
             </div>
             <button class="add-companion-btn">还可添加0位随行人员</button>
