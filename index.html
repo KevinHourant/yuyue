@@ -207,6 +207,17 @@
             text-decoration: none;
             pointer-events: none;
             -webkit-text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            user-select: none;
+        }
+
+        .user-id:link,
+        .user-id:visited,
+        .user-id:hover,
+        .user-id:active {
+            color: #333;
+            text-decoration: none;
         }
 
         .tag {
@@ -360,7 +371,7 @@
             </div>
             <div class="main-user">
                 <span class="user-name">张伟</span>
-                <span class="user-id"> 2023102066 </span>
+                <div class="user-id"> 2023102066 </div>
                 <span class="tag">主预约人</span>
             </div>
             <button class="add-companion-btn">还可添加0位随行人员</button>
