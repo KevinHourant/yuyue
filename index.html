@@ -9,17 +9,17 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: PingFang SC, -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            background-color: #f5f5f5;
+            background-color: #f7f7f7;
         }
 
         .container {
             max-width: 600px;
             margin: 0 auto;
-            background-color: #f5f5f5;
+            background-color: #f7f7f7;
             min-height: 100vh;
             position: relative;
             overflow-y: auto;
@@ -41,35 +41,72 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid #eee;
+            background-color: white;
         }
 
+        /* 导航栏返回按钮 */
         .back-btn {
-            font-size: 24px;
+            font-size: 18px;
             background: none;
             border: none;
             cursor: pointer;
+            position: relative;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+        }
+
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+            transform: rotate(45deg);
+            left: 4px;
+            top: 4px;
         }
 
         /* 预约信息部分 */
-        .section-title {
+        .info-title, .qr-title {
             font-size: 18px;
             font-weight: bold;
             padding: 15px;
-            background-color: #f8f8f8;
+            color: #333;
+            text-align: left;
+            background-color: white;
+            position: relative;
+        }
+
+        .info-title::after, .qr-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 15px;
+            right: 15px;
+            height: 1px;
+            background-color: #eee;
         }
 
         .info-item {
             padding: 15px;
             display: flex;
             justify-content: space-between;
+            background-color: white;
+            color: #333;
+        }
+
+        .info-section {
+            background-color: white;
         }
 
         /* 二维码部分 */
         .qr-code-section {
-            padding: 20px;
+            padding: 0;
             text-align: center;
             position: relative;
+            background-color: white;
         }
 
         .qr-code {
@@ -82,23 +119,13 @@
             align-items: center;
         }
 
-        .qr-code::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(128, 128, 128, 0.8);
-            z-index: 1;
-        }
-
         .qr-code img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
 
+        /* 已核销文字背景也相应调整 */
         .expired-text {
             position: absolute;
             top: 50%;
@@ -106,7 +133,7 @@
             transform: translate(-50%, -50%);
             color: white;
             font-size: 18px;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(100, 100, 100, 0.85);
             padding: 5px 15px;
             border-radius: 4px;
             z-index: 2;
@@ -121,10 +148,8 @@
         /* 随行人员部分 */
         .companions-section {
             padding: 15px;
-            margin: 15px;
+            margin-top: 10px;
             background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .companion-header {
@@ -135,22 +160,52 @@
         }
 
         .companion-count {
-            color: #2196F3;
+            color: #4395ff;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .arrow-up {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-left: 1px solid #4395ff;
+            border-top: 1px solid #4395ff;
+            transform: rotate(45deg);
+            margin-top: 3px;
         }
 
         .main-user {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
-            padding: 10px 0;
+            padding: 10px 15px;
+            background-color: #f7f7f7;
+            margin: 0 -10px;
+        }
+
+        .user-name {
+            font-size: 14px;
+            color: #333;
+            margin-right: auto;
+        }
+
+        .user-id {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #333;
         }
 
         .tag {
-            color: #4CAF50;
-            border: 1px solid #4CAF50;
+            color: #52c41a;
+            border: 1px solid #52c41a;
             padding: 2px 8px;
             border-radius: 4px;
             font-size: 12px;
+            margin-left: auto;
         }
 
         .add-companion-btn {
@@ -159,7 +214,7 @@
             padding: 8px 20px;
             width: 100%;
             border-radius: 20px;
-            background: #2196F3;
+            background: #4395ff;
             margin-top: 15px;
             font-size: 16px;
         }
@@ -175,17 +230,19 @@
             margin: 0 auto;
             padding: 15px;
             background-color: white;
-            border-top: 1px solid #eee;
+            justify-content: flex-end;
+            gap: 10px;
+            z-index: 1000;
+            box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.1);
         }
 
         .bottom-btn {
-            flex: 1;
-            padding: 12px;
-            margin: 0 5px;
+            padding: 12px 25px;
             border: 1px solid #ddd;
-            border-radius: 5px;
+            border-radius: 20px;
             background-color: white;
-            font-size: 16px;
+            font-size: 14px;
+            color: #333;
         }
 
         .cancel-btn {
@@ -198,10 +255,8 @@
 
         .section-content {
             background-color: white;
-            margin: 15px;
-            border-radius: 8px;
-            padding: 5px 0;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin: 0;
+            padding: 0;
         }
 
         .pull-to-refresh {
@@ -229,6 +284,16 @@
                 transform: rotate(360deg);
             }
         }
+
+        .divider {
+            height: 10px;
+            background-color: #f7f7f7;
+        }
+
+        /* 添加底部空白，防止内容被按钮遮挡 */
+        .bottom-padding {
+            height: 80px;
+        }
     </style>
 </head>
 <body>
@@ -236,50 +301,63 @@
         <div class="pull-to-refresh">↓ 下拉刷新</div>
         <!-- 导航栏 -->
         <div class="nav-bar">
-            <button class="back-btn">×</button>
+            <button class="back-btn"></button>
             <span>预约详情</span>
             <span></span>
         </div>
 
         <!-- 预约信息 -->
-        <div class="section-title">预约信息</div>
-        <div class="section-content">
-            <div class="info-item">
-                <span>预约项目</span>
-                <span>健身房</span>
-            </div>
-            <div class="info-item">
-                <span>预约场地</span>
-                <span>北校区健身房（北）</span>
-            </div>
-            <div class="info-item">
-                <span>预约时间</span>
-                <span id="appointmentTime">2024-12-19 19:30-21:00</span>
+        <div class="info-section">
+            <div class="info-title">预约信息</div>
+            <div class="section-content">
+                <div class="info-item">
+                    <span>预约项目</span>
+                    <span>健身房</span>
+                </div>
+                <div class="info-item">
+                    <span>预约场地</span>
+                    <span>北校区健身房（北）</span>
+                </div>
+                <div class="info-item">
+                    <span>预约时间</span>
+                    <span id="appointmentTime">2024-12-28 14:00-15:30</span>
+                </div>
             </div>
         </div>
 
+        <div class="divider"></div>
+
         <!-- 二维码部分 -->
-        <div class="section-title">预约二维码</div>
         <div class="qr-code-section">
+            <div class="qr-title">预约二维码</div>
             <div class="qr-code">
-                <img src="qr-code.png" alt="预约二维码">
+                <img src="2.png" alt="预约二维码">
                 <span class="expired-text">已核销</span>
             </div>
             <p class="qr-notice">进入场馆时请展示此二维码用于核销</p>
         </div>
 
+        <div class="divider"></div>
+
         <!-- 随行人员 -->
         <div class="companions-section">
             <div class="companion-header">
                 <span>随行人员</span>
-                <span class="companion-count">共0位</span>
+                <span class="companion-count">
+                    共0位
+                    <span class="arrow-up"></span>
+                </span>
             </div>
             <div class="main-user">
-                <span>侯泽康 2023122003</span>
+                <span class="user-name">张伟</span>
+                <span class="user-id">2023102006</span>
                 <span class="tag">主预约人</span>
             </div>
             <button class="add-companion-btn">还可添加0位随行人员</button>
         </div>
+
+        <!-- 添加底部空白区域 -->
+        <div class="bottom-padding"></div>
 
         <!-- 底部按钮 -->
         <div class="bottom-buttons">
@@ -299,7 +377,7 @@
 
             // 添加随行人员按钮点击事件
             document.querySelector('.add-companion-btn').addEventListener('click', function() {
-                alert('已达到随行人员上限');
+                alert('已达到随行人上限');
             });
 
             // 提交留言按钮点击事件
@@ -338,7 +416,7 @@
                     if (pullDistance >= 60) {
                         pullToRefresh.textContent = '释放刷新';
                     } else {
-                        pullToRefresh.textContent = '↓ 下拉刷新';
+                        pullToRefresh.textContent = '��� 下拉刷新';
                     }
                 }
             });
