@@ -354,12 +354,31 @@
             padding: 20px 15px;
         }
 
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
         .time-input {
             width: 100%;
             padding: 12px;
             border: 1px solid #eee;
             border-radius: 8px;
-            margin-bottom: 15px;
             font-size: 16px;
         }
 
@@ -465,12 +484,26 @@
     <div class="modal-overlay"></div>
     <div class="time-picker-modal">
         <div class="modal-header">
-            <span class="modal-title">修改预约时间</span>
+            <span class="modal-title">修改预约信息</span>
             <button class="close-btn">×</button>
         </div>
         <div class="time-input-container">
-            <input type="datetime-local" class="time-input" id="startTime">
-            <input type="datetime-local" class="time-input" id="endTime">
+            <div class="input-group">
+                <label>姓名</label>
+                <input type="text" class="form-input" id="nameInput" placeholder="请输入姓名">
+            </div>
+            <div class="input-group">
+                <label>学号</label>
+                <input type="text" class="form-input" id="idInput" placeholder="请输入学号">
+            </div>
+            <div class="input-group">
+                <label>开始时间</label>
+                <input type="datetime-local" class="time-input" id="startTime">
+            </div>
+            <div class="input-group">
+                <label>结束时间</label>
+                <input type="datetime-local" class="time-input" id="endTime">
+            </div>
             <button class="confirm-btn">确认修改</button>
         </div>
     </div>
@@ -562,17 +595,24 @@
             const closeBtn = document.querySelector('.close-btn');
             const startTimeInput = document.getElementById('startTime');
             const endTimeInput = document.getElementById('endTime');
+            const nameInput = document.getElementById('nameInput');
+            const idInput = document.getElementById('idInput');
             const confirmBtn = document.querySelector('.confirm-btn');
             const appointmentTimeSpan = document.getElementById('appointmentTime');
+            const userNameSpan = document.querySelector('.user-name');
+            const userIdSpan = document.querySelector('.user-id span');
 
             // 点击箭头显示弹出层
             arrowUp.addEventListener('click', function() {
                 modal.classList.add('active');
                 overlay.classList.add('active');
+                // 设置当前值
+                nameInput.value = userNameSpan.textContent;
+                idInput.value = userIdSpan.textContent;
                 // 设置默认时间
                 const currentTime = new Date();
                 startTimeInput.value = currentTime.toISOString().slice(0, 16);
-                const endTime = new Date(currentTime.getTime() + 90 * 60000); // 默认90分钟
+                const endTime = new Date(currentTime.getTime() + 90 * 60000);
                 endTimeInput.value = endTime.toISOString().slice(0, 16);
             });
 
@@ -607,8 +647,14 @@
                 const formattedTime = `${formatTime(startTime)}-${formatTime(endTime).split(' ')[1]}`;
                 appointmentTimeSpan.textContent = formattedTime;
 
+                // 更新姓名和学号
+                userNameSpan.textContent = nameInput.value;
+                userIdSpan.textContent = idInput.value;
+
                 // 保存到 localStorage
                 localStorage.setItem('appointmentTime', formattedTime);
+                localStorage.setItem('userName', nameInput.value);
+                localStorage.setItem('userId', idInput.value);
                 
                 // 关闭弹出层
                 modal.classList.remove('active');
