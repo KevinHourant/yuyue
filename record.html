@@ -104,11 +104,58 @@
         .detail-btn {
             background-color: #4395ff;
             color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
+            padding: 6px 15px;
+            border-radius: 20px;
             font-size: 12px;
             text-align: center;
             cursor: pointer;
+        }
+
+        .main-tag {
+            display: inline-block;
+            color: #52c41a;
+            border: 1px solid #52c41a;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .project-name {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 0;
+        }
+
+        .empty-state.active {
+            display: flex;
+        }
+
+        .empty-state img {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-text {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .record-list {
+            display: block;
+        }
+
+        .record-list.hidden {
+            display: none;
         }
     </style>
 </head>
@@ -121,29 +168,39 @@
         </div>
 
         <div class="tabs">
-            <div class="tab active">全部</div>
-            <div class="tab">待支付</div>
-            <div class="tab">待入场</div>
-            <div class="tab">已取消</div>
-            <div class="tab">已入场</div>
+            <div class="tab active" data-type="all">全部</div>
+            <div class="tab" data-type="pending">待支付</div>
+            <div class="tab" data-type="waiting">待入场</div>
+            <div class="tab" data-type="cancelled">已取消</div>
+            <div class="tab" data-type="completed">已入场</div>
         </div>
 
-        <div class="record" onclick="window.location.href='index.html'">
-            <div class="record-item">
-                <span>预约项目</span>
-                <span>健身房</span>
-            </div>
-            <div class="record-item">
-                <span>预约场地</span>
-                <span>健身房（北）</span>
-            </div>
-            <div class="record-item">
-                <span>预约时间</span>
-                <span>2024-12-19 19:30-21:00</span>
-            </div>
-            <div class="record-item">
-                <span class="status">已入场</span>
-                <span class="detail-btn">查看详情</span>
+        <div class="empty-state">
+            <img src="empty.png" alt="暂无数据">
+            <span class="empty-state-text">~ 暂无数据 ~</span>
+        </div>
+
+        <div class="record-list">
+            <div class="record" onclick="window.location.href='index.html'">
+                <div class="record-item">
+                    <span>预约项目</span>
+                    <div class="project-name">
+                        <span class="main-tag">主</span>
+                        <span>健身房</span>
+                    </div>
+                </div>
+                <div class="record-item">
+                    <span>预约场地</span>
+                    <span>健身房（北）</span>
+                </div>
+                <div class="record-item">
+                    <span>预约时间</span>
+                    <span>2024-12-19 19:30-21:00</span>
+                </div>
+                <div class="record-item">
+                    <span class="status">已入场</span>
+                    <span class="detail-btn">查看详情</span>
+                </div>
             </div>
         </div>
     </div>
@@ -155,6 +212,30 @@
             if (savedTime) {
                 document.querySelector('.record-item:nth-child(3) span:last-child').textContent = savedTime;
             }
+
+            // 处理标签切换
+            const tabs = document.querySelectorAll('.tab');
+            const recordList = document.querySelector('.record-list');
+            const emptyState = document.querySelector('.empty-state');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // 移除其他标签的激活状态
+                    tabs.forEach(t => t.classList.remove('active'));
+                    // 激活当前标签
+                    this.classList.add('active');
+
+                    // 处理显示状态
+                    const type = this.getAttribute('data-type');
+                    if (type === 'all') {
+                        recordList.classList.remove('hidden');
+                        emptyState.classList.remove('active');
+                    } else {
+                        recordList.classList.add('hidden');
+                        emptyState.classList.add('active');
+                    }
+                });
+            });
         });
     </script>
 </body>
