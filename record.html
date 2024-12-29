@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>预约记录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: PingFang SC, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: #f7f7f7;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f7f7f7;
+            min-height: 100vh;
+            position: relative;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-bar {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f7f7f7;
+        }
+
+        .nav-bar > span {
+            font-weight: bold;
+        }
+
+        .back-btn {
+            font-size: 18px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+        }
+
+        .back-btn::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-left: 2px solid #333;
+            border-bottom: 2px solid #333;
+            transform: rotate(45deg);
+            left: 4px;
+            top: 4px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            background-color: white;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tab {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .tab.active {
+            color: #333;
+            border-bottom: 2px solid #4395ff;
+        }
+
+        .record {
+            background-color: white;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .status {
+            color: #ff9800;
+            border: 1px solid #ff9800;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .detail-btn {
+            background-color: #4395ff;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="nav-bar">
+            <button class="back-btn" onclick="window.location.href='index.html'"></button>
+            <span>预约记录</span>
+            <span></span>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active">全部</div>
+            <div class="tab">待支付</div>
+            <div class="tab">待入场</div>
+            <div class="tab">已取消</div>
+            <div class="tab">已入场</div>
+        </div>
+
+        <div class="record" onclick="window.location.href='index.html'">
+            <div class="record-item">
+                <span>预约项目</span>
+                <span>健身房</span>
+            </div>
+            <div class="record-item">
+                <span>预约场地</span>
+                <span>健身房（北）</span>
+            </div>
+            <div class="record-item">
+                <span>预约时间</span>
+                <span>2024-12-19 19:30-21:00</span>
+            </div>
+            <div class="record-item">
+                <span class="status">已入场</span>
+                <span class="detail-btn">查看详情</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从 localStorage 获取保存的时间
+            const savedTime = localStorage.getItem('appointmentTime');
+            if (savedTime) {
+                document.querySelector('.record-item:nth-child(3) span:last-child').textContent = savedTime;
+            }
+        });
+    </script>
+</body>
+</html> 

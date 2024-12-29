@@ -54,12 +54,11 @@
             font-size: 18px;
             background: none;
             border: none;
-            cursor: default;
+            cursor: pointer;
             position: relative;
             width: 20px;
             height: 20px;
             padding: 0;
-            pointer-events: none;
         }
 
         .back-btn::before {
@@ -309,6 +308,86 @@
         .bottom-padding {
             height: 60px;
         }
+
+        /* 时间修改弹出层样式 */
+        .time-picker-modal {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            z-index: 2000;
+            border-radius: 16px 16px 0 0;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            max-width: 600px;
+            margin: 0 auto;
+            padding-bottom: 20px;
+        }
+
+        .time-picker-modal.active {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            border: none;
+            background: none;
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .time-input-container {
+            padding: 20px 15px;
+        }
+
+        .time-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+
+        .confirm-btn {
+            width: 100%;
+            padding: 12px;
+            background: #4395ff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            display: none;
+        }
+
+        .modal-overlay.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -321,7 +400,7 @@
             <span></span>
         </div>
 
-        <!-- ��约信息 -->
+        <!-- 预约信息 -->
         <div class="info-section">
             <div class="info-title">预约信息</div>
             <div class="section-content">
@@ -382,9 +461,29 @@
         </div>
     </div>
 
+    <!-- 在 body 中添加弹出层 HTML -->
+    <div class="modal-overlay"></div>
+    <div class="time-picker-modal">
+        <div class="modal-header">
+            <span class="modal-title">修改预约时间</span>
+            <button class="close-btn">×</button>
+        </div>
+        <div class="time-input-container">
+            <input type="datetime-local" class="time-input" id="startTime">
+            <input type="datetime-local" class="time-input" id="endTime">
+            <button class="confirm-btn">确认修改</button>
+        </div>
+    </div>
+
     <script>
         // 页面加载完成后的处理
         document.addEventListener('DOMContentLoaded', function() {
+            // 从 localStorage 获取保存的时间
+            const savedTime = localStorage.getItem('appointmentTime');
+            if (savedTime) {
+                document.getElementById('appointmentTime').textContent = savedTime;
+            }
+
             // 添加随行人员按钮点击事件
             document.querySelector('.add-companion-btn').addEventListener('click', function() {
                 alert('已达到随行人上限');
@@ -454,6 +553,71 @@
                         container.style.transform = 'translateY(0)';
                     }
                 }
+            });
+
+            // 获取元素
+            const arrowUp = document.querySelector('.arrow-up');
+            const modal = document.querySelector('.time-picker-modal');
+            const overlay = document.querySelector('.modal-overlay');
+            const closeBtn = document.querySelector('.close-btn');
+            const startTimeInput = document.getElementById('startTime');
+            const endTimeInput = document.getElementById('endTime');
+            const confirmBtn = document.querySelector('.confirm-btn');
+            const appointmentTimeSpan = document.getElementById('appointmentTime');
+
+            // 点击箭头显示弹出层
+            arrowUp.addEventListener('click', function() {
+                modal.classList.add('active');
+                overlay.classList.add('active');
+                // 设置默认时间
+                const currentTime = new Date();
+                startTimeInput.value = currentTime.toISOString().slice(0, 16);
+                const endTime = new Date(currentTime.getTime() + 90 * 60000); // 默认90分钟
+                endTimeInput.value = endTime.toISOString().slice(0, 16);
+            });
+
+            // 点击关闭按钮隐藏弹出层
+            closeBtn.addEventListener('click', function() {
+                modal.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            // 点击遮罩层隐藏弹出层
+            overlay.addEventListener('click', function() {
+                modal.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            // 确认按钮点击事件
+            confirmBtn.addEventListener('click', function() {
+                const startTime = new Date(startTimeInput.value);
+                const endTime = new Date(endTimeInput.value);
+                
+                // 格式化时间
+                const formatTime = (date) => {
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    return `${year}-${month}-${day} ${hours}:${minutes}`;
+                };
+
+                // 更新预约时间显示
+                const formattedTime = `${formatTime(startTime)}-${formatTime(endTime).split(' ')[1]}`;
+                appointmentTimeSpan.textContent = formattedTime;
+
+                // 保存到 localStorage
+                localStorage.setItem('appointmentTime', formattedTime);
+                
+                // 关闭弹出层
+                modal.classList.remove('active');
+                overlay.classList.remove('active');
+            });
+
+            // 返回按钮点击事件
+            document.querySelector('.back-btn').addEventListener('click', function() {
+                window.location.href = 'record.html';
             });
         });
     </script>
